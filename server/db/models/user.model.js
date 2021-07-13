@@ -13,7 +13,10 @@ export default function (sequelize) {
         validate: {
           // We require usernames to have length of at least 3, and
           // only use letters, numbers and underscores.
-          is: /^\w{3,}$/,
+          is: {
+            args: /^\w{3,}$/,
+            msg: 'Username must be at least 3 characters, and only use letters, numbers and underscores',
+          },
         },
       },
       email: {
@@ -23,7 +26,7 @@ export default function (sequelize) {
         validate: {
           // We require usernames to have length of at least 3, and
           // only use letters, numbers and underscores.
-          is: /^\w{3,}$/,
+          isEmail: { msg: 'Email is invalid' },
         },
       },
       password: {
@@ -32,7 +35,10 @@ export default function (sequelize) {
         validate: {
           // We require usernames to have length of at least 3, and
           // only use letters, numbers and underscores.
-          is: /^\w{3,}$/,
+          min: {
+            args: 6,
+            msg: 'Password must be at least 6 characters long',
+          },
         },
       },
     },

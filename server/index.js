@@ -7,9 +7,12 @@ import schema from './schema.js';
 import sequelize from './db/index.js';
 
 async function startApolloServer() {
-  await sequelize.sync({ force: true });
+  await sequelize.sync();
 
-  const server = new ApolloServer({ schema });
+  const server = new ApolloServer({
+    schema,
+    context: ({ req, res }) => ({ req, res, db: sequelize.models }),
+  });
   await server.start();
 
   const app = express();

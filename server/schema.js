@@ -1,14 +1,15 @@
-import helloTypes from './typeDefs/hello.type.js';
-import helloResolver from './resolvers/hello.resolver.js';
+import path from 'path';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import { loadFilesSync } from '@graphql-tools/load-files';
+import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 
-export const typeDefs = [helloTypes];
+const typesArray = loadFilesSync(path.join(__dirname, './typeDefs'));
+const typeDefs = mergeTypeDefs(typesArray);
 
-export const resolvers = {
-  Query: {
-    ...helloResolver.Query,
-  },
-};
+const resolversArray = loadFilesSync(
+  path.join(__dirname, './resolvers/*.resolver.js'),
+);
+const resolvers = mergeResolvers(resolversArray);
 
 export default makeExecutableSchema({
   typeDefs,
