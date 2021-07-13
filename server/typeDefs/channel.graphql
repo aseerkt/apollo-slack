@@ -4,3 +4,7 @@ type Channel {
   public: Boolean!
   messages: [Message!]!
 }
+
+type Mutation {
+  createChannel(name: String!, teamId: Int!, public: Boolean = true): Boolean!
+}
