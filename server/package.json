@@ -1,0 +1,27 @@
+{
+  "name": "slack-server",
+  "version": "1.0.0",
+  "description": "Slack API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r esm index.js",
+    "dev": "nodemon -r esm index.js"
+  },
+  "author": "Aseer KT",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.12",
+    "sequelize-cli": "^6.2.0"
+  },
+  "dependencies": {
+    "apollo-server-express": "^3.0.0",
+    "chalk": "^4.1.1",
+    "dotenv": "^10.0.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "graphql": "^15.5.1",
+    "graphql-tools": "^7.0.5",
+    "pg": "^8.6.0",
+    "sequelize": "^6.6.5"
+  }
+}
