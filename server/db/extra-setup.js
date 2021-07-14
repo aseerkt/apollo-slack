@@ -1,22 +1,35 @@
+import { genSalt, hash } from 'bcryptjs';
+
 export default function applyExtraSetup(sequelize) {
-  const { team, channel, message, user } = sequelize.models;
+  const { Team, Channel, Message, User } = sequelize.models;
+
+  // RELATIONS
 
   // team : owner
-  team.belongsTo(user, { foreignKey: 'owner' });
-  user.hasMany(team);
+  Team.belongsTo(User, { foreignKey: 'owner' });
+  User.hasMany(Team);
 
   // team : channel
-  channel.belongsTo(team, { foreignKey: 'teamId' });
-  team.hasMany(channel);
+  Channel.belongsTo(Team, { foreignKey: 'teamId' });
+  Team.hasMany(Channel);
 
   // channel : message
-  message.belongsTo(channel, { foreignKey: 'channelId' });
-  channel.hasMany(message);
+  Message.belongsTo(Channel, { foreignKey: 'channelId' });
+  Channel.hasMany(Message);
 
   // message : user
-  message.belongsTo(user, { foreignKey: 'userId' });
-  user.hasMany(message);
+  Message.belongsTo(User, { foreignKey: 'userId' });
+  User.hasMany(Message);
 
   // team : memeber : user
-  team.belongsToMany(user, { through: 'members' });
+  Team.belongsToMany(User, { through: 'members' });
+
+  // HOOKS
+
+  // hash password before create
+  User.beforeCreate(async function (user) {
+    const salt = await genSalt(12);
+    const hashedPassword = await hash(user.password, salt);
+    user.password = hashedPassword;
+  });
 }

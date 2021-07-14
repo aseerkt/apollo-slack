@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 
 export default function (sequelize) {
   sequelize.define(
-    'message',
+    'Message',
     {
       text: {
         type: DataTypes.STRING,

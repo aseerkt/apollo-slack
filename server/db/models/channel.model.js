@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 
 export default function (sequelize) {
   sequelize.define(
-    'channel',
+    'Channel',
     {
       name: {
         type: DataTypes.STRING,

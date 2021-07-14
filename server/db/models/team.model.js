@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 
 export default function (sequelize) {
   sequelize.define(
-    'team',
+    'Team',
     {
       name: {
         type: DataTypes.STRING,

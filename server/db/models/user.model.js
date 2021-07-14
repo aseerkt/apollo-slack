@@ -4,7 +4,7 @@ import { DataTypes } from 'sequelize';
 // This function will automatically receive as parameter the Sequelize connection object.
 export default function (sequelize) {
   sequelize.define(
-    'user',
+    'User',
     {
       username: {
         allowNull: false,

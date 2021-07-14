@@ -2,7 +2,7 @@ export default {
   Mutation: {
     async createMessage(root, args, { db }) {
       try {
-        await db.message.create({ ...args });
+        await db.Message.create({ ...args });
       } catch (err) {}
     },
   },

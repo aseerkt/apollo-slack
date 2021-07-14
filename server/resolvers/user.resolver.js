@@ -1,15 +1,21 @@
 export default {
   Query: {
     getUser(root, { id }, { db }) {
-      return db.user.findOne({ where: { id } });
+      return db.User.findOne({ where: { id } });
     },
     allUsers(root, args, { db }) {
-      return db.user.findAll({});
+      return db.User.findAll({});
     },
   },
   Mutation: {
-    createUser(root, args, { db }, info) {
-      return db.user.create(args);
+    async register(root, args, { db }, info) {
+      try {
+        await db.User.create(args);
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
     },
   },
 };
