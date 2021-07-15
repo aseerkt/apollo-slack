@@ -1,16 +1,23 @@
 import { Form, Input, Button } from 'antd';
+import { useHistory } from 'react-router-dom';
 import useRegisterMutation from '../hooks/apollo/mutations/register';
 import Formlayout from '../layouts/FormLayout';
+import toErrorMap from '../utils/toErrorMap';
 
 export default function Register() {
+  const history = useHistory();
+  const [form] = Form.useForm();
   const [register, { loading }] = useRegisterMutation();
 
-  const onFinish = async (values) => {
+  const onFinish = async function (values) {
     try {
       const res = await register({
         variables: values,
       });
       console.log(res);
+      const { ok, errors } = res.data?.register;
+      if (errors) form.setFields(toErrorMap(errors));
+      if (ok) history.push('/login');
     } catch (err) {
       console.error(err);
     }
@@ -23,10 +30,13 @@ export default function Register() {
   return (
     <Formlayout title='Register'>
       <Form
+        form={form}
         layout='vertical'
-        name='basic'
+        name='register'
         initialValues={{
-          remember: true,
+          email: '',
+          username: '',
+          password: '',
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}

@@ -12,6 +12,7 @@ export default function (sequelize) {
       pulic: {
         type: DataTypes.BOOLEAN,
         default: true,
+        allowNull: false,
       },
     },
     { timestamps: true, tableName: 'channels' },
