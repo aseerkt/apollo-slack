@@ -21,6 +21,7 @@ async function startApolloServer() {
   app.use(
     cors({
       origin: [CLIENT_URL, !IS_PROD && 'https://studio.apollographql.com'],
+      credentials: true,
     }),
   );
 

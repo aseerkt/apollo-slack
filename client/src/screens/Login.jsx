@@ -1,16 +1,41 @@
 import { Form, Input, Button, Typography } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Formlayout from '../layouts/FormLayout';
+import useLoginMutation from '../hooks/apollo/mutations/login';
+import { saveAccessToken } from '../utils/accessTokenHelper';
+import { ME_QUERY } from '../hooks/apollo/queries/me';
+import toErrorMap from '../utils/toErrorMap';
 
 function Login() {
+  const [form] = Form.useForm();
+  const history = useHistory();
+  const [login, { loading }] = useLoginMutation();
+
   const onFinish = async function (values) {
     try {
+      const res = await login({
+        variables: values,
+        update: (cache, { data }) => {
+          const { user, accessToken } = data?.login || {};
+          console.log(data);
+          if (user && accessToken) {
+            saveAccessToken(accessToken);
+            // cache.writeQuery({ query: ME_QUERY, data: user });
+            history.push('/');
+          }
+        },
+      });
+      const { errors } = res.data?.login;
+      if (errors) {
+        form.setFields(toErrorMap(errors));
+      }
     } catch (err) {}
   };
 
   return (
     <Formlayout title='Login'>
       <Form
+        form={form}
         layout='vertical'
         name='login'
         initialValues={{ usernameOrEmail: '', password: '' }}
@@ -38,7 +63,7 @@ function Login() {
         </Form.Item>
 
         <Form.Item>
-          <Button type='primary' htmlType='submit'>
+          <Button loading={loading} type='primary' htmlType='submit'>
             Login
           </Button>
         </Form.Item>

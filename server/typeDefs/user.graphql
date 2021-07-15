@@ -11,6 +11,13 @@ type RegisterResponse {
   errors: [Error!]
 }
 
+type LoginResponse {
+  ok: Boolean!
+  accessToken: String
+  user: User
+  errors: [Error!]
+}
+
 type Query {
   getUser(id: Int!): User!
   allUsers: [User!]!
@@ -22,4 +29,5 @@ type Mutation {
     email: String!
     password: String!
   ): RegisterResponse!
+  login(usernameOrEmail: String!, password: String!): LoginResponse!
 }
