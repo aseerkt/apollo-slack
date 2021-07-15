@@ -1,5 +1,5 @@
-import { Form, Input, Button } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { Form, Input, Button, Typography } from 'antd';
+import { Link, useHistory } from 'react-router-dom';
 import useRegisterMutation from '../hooks/apollo/mutations/register';
 import Formlayout from '../layouts/FormLayout';
 import toErrorMap from '../utils/toErrorMap';
@@ -90,6 +90,9 @@ export default function Register() {
           </Button>
         </Form.Item>
       </Form>
+      <Typography.Text>
+        Already have an account? <Link to='/login'>Login</Link>
+      </Typography.Text>
     </Formlayout>
   );
 }
