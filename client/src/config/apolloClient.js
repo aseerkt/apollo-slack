@@ -1,11 +1,30 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import {
+  ApolloClient,
+  createHttpLink,
+  ApolloLink,
+  InMemoryCache,
+} from '@apollo/client';
 import { API_URL } from './constants';
 import { setContext } from '@apollo/client/link/context';
-import { getAccessToken } from '../utils/accessTokenHelper';
+import { getAccessToken, saveAccessToken } from '../utils/accessTokenHelper';
 
 const httpLink = createHttpLink({
   uri: `${API_URL}/graphql`,
   credentials: 'include',
+});
+
+const afterWareLink = new ApolloLink((operation, forward) => {
+  return forward(operation).map((response) => {
+    const context = operation.getContext();
+    const {
+      response: { headers },
+    } = context;
+    const token = headers['x-token'];
+    if (token) {
+      saveAccessToken(token);
+    }
+    return response;
+  });
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -21,7 +40,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: authLink.concat(afterWareLink).concat(httpLink),
   cache: new InMemoryCache(),
 });
 

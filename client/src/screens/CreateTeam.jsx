@@ -2,6 +2,7 @@ import { Button, Form, Input } from 'antd';
 import { useHistory } from 'react-router-dom';
 import useCreateTeamMutation from '../hooks/apollo/mutations/createTeam';
 import Formlayout from '../layouts/FormLayout';
+import toErrorMap from '../utils/toErrorMap';
 
 function CreateTeam() {
   const history = useHistory();
@@ -12,8 +13,12 @@ function CreateTeam() {
     try {
       const res = await createTeam({ variables: values });
       console.log(res);
-      if (res.ok) {
+      const { ok, errors } = res.data?.createTeam;
+      if (ok) {
         history.push('/');
+      }
+      if (errors) {
+        form.setFields(toErrorMap(errors));
       }
     } catch (err) {
       console.error(err);
