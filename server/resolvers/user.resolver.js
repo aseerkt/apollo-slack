@@ -15,8 +15,8 @@ export default {
   Mutation: {
     async register(root, args, { db }) {
       try {
-        const user = await db.User.create(args);
-        return { ok: true, user };
+        await db.User.create(args);
+        return { ok: true };
       } catch (err) {
         console.log(err);
         return { ok: false, errors: formatErrors(err) };

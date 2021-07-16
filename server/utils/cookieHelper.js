@@ -1,4 +1,9 @@
-import { IS_PROD } from '../constants';
+import {
+  signAccessToken,
+  signRefreshToken,
+  verifyAccessToken,
+  verifyRefreshToken,
+} from './jwtHelper';
 
 export const COOKIE_NAME = 'apollo-slack';
 
@@ -14,4 +19,47 @@ export function setTokenCookie(req, res, token) {
     secure: isSecure,
     sameSite: isSecure ? 'none' : 'lax',
   });
+}
+
+export function getCookieToken(req) {
+  return req.cookies[COOKIE_NAME];
+}
+
+export function extractAndIssueTokens(req, res) {
+  let userId;
+  let accessToken;
+  let refreshToken;
+  try {
+    refreshToken = getCookieToken(req);
+    accessToken =
+      req.headers.authorization &&
+      req.headers.authorization.split('Bearer ')[1];
+    console.log({ accessToken, refreshToken });
+
+    if (accessToken && refreshToken) {
+      const refreshPayload = verifyRefreshToken(refreshToken);
+      try {
+        const accessPayload = verifyAccessToken(accessToken);
+        if (accessPayload.userId === refreshPayload.userId) {
+          userId = accessPayload.userId;
+        }
+      } catch (err) {
+        console.log(err);
+        // here access token may expire
+        if (err.message === 'jwt expired') {
+          accessToken = signAccessToken(refreshPayload.userId);
+          refreshToken = signRefreshToken(refreshPayload.userId);
+          setTokenCookie(req, res);
+          userId = refreshPayload.userId;
+        }
+      }
+    }
+  } catch (err) {
+    // probably error related to jwt verification
+    console.log(err);
+  }
+  return {
+    userId,
+    accessToken,
+  };
 }

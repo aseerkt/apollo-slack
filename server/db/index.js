@@ -1,15 +1,15 @@
 import { Sequelize } from 'sequelize';
-import { IS_PROD } from '../constants.js';
 import applyExtraSetup from './extra-setup.js';
 
 import userModel from './models/user.model.js';
 import teamModel from './models/team.model.js';
 import channelModel from './models/channel.model.js';
 import messageModel from './models/message.model.js';
+import memberModel from './models/member.model.js';
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
-  logging: !IS_PROD,
+  logging: false,
 });
 
 const modelDefiners = [
@@ -17,6 +17,7 @@ const modelDefiners = [
   teamModel,
   channelModel,
   messageModel,
+  memberModel,
   // Add more models here...
   // require('./models/item'),
 ];

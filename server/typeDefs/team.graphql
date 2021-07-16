@@ -7,5 +7,5 @@ type Team {
 }
 
 type Mutation {
-  createTeam(name: String!): Boolean!
+  createTeam(name: String!): DefaultResponse!
 }

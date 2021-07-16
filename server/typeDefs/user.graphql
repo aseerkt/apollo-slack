@@ -5,12 +5,6 @@ type User {
   teams: [Team!]!
 }
 
-type RegisterResponse {
-  ok: Boolean!
-  user: User
-  errors: [Error!]
-}
-
 type LoginResponse {
   ok: Boolean!
   accessToken: String
@@ -28,6 +22,6 @@ type Mutation {
     username: String!
     email: String!
     password: String!
-  ): RegisterResponse!
+  ): DefaultResponse!
   login(usernameOrEmail: String!, password: String!): LoginResponse!
 }

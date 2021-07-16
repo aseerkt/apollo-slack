@@ -2,17 +2,23 @@ import 'dotenv/config';
 import chalk from 'chalk';
 import cors from 'cors';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { ApolloServer } from 'apollo-server-express';
 import { CLIENT_URL, PORT, IS_PROD } from './constants.js';
 import schema from './schema.js';
 import sequelize from './db/index.js';
+import { extractAndIssueTokens, getCookieToken } from './utils/cookieHelper.js';
+import { verifyTokens } from './utils/jwtHelper';
 
 async function startApolloServer() {
-  await sequelize.sync();
+  await sequelize.sync({ force: true });
 
   const server = new ApolloServer({
     schema,
-    context: ({ req, res }) => ({ req, res, db: sequelize.models }),
+    context: function ({ req, res }) {
+      const { userId } = extractAndIssueTokens(req, res);
+      return { req, res, db: sequelize.models, userId };
+    },
   });
   await server.start();
 
@@ -24,6 +30,8 @@ async function startApolloServer() {
       credentials: true,
     }),
   );
+
+  app.use(cookieParser());
 
   server.applyMiddleware({ app, cors: false });
 

@@ -5,24 +5,21 @@ export default function applyExtraSetup(sequelize) {
 
   // RELATIONS
 
-  // team : owner
-  Team.belongsTo(User, { foreignKey: 'owner' });
-  User.hasMany(Team);
+  // team : owner m:1
+  Team.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
 
-  // team : channel
+  // team : channel 1:m
   Channel.belongsTo(Team, { foreignKey: 'teamId' });
-  Team.hasMany(Channel);
 
-  // channel : message
+  // channel : message 1:m
   Message.belongsTo(Channel, { foreignKey: 'channelId' });
-  Channel.hasMany(Message);
 
-  // message : user
+  // message : user m:1
   Message.belongsTo(User, { foreignKey: 'userId' });
-  User.hasMany(Message);
 
-  // team : memeber : user
-  Team.belongsToMany(User, { through: 'members' });
+  // team : memeber : user m:n
+  Team.belongsToMany(User, { through: 'members', foreignKey: 'teamId' });
+  User.belongsToMany(Team, { through: 'members', foreignKey: 'userId' });
 
   // HOOKS
 

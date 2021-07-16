@@ -4,6 +4,7 @@ import client from './config/apolloClient';
 import Home from './screens/Home';
 import Register from './screens/Register';
 import Login from './screens/Login';
+import CreateTeam from './screens/CreateTeam';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route exact path='/' component={Home} />
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
+          <Route exact path='/create-team' component={CreateTeam} />
         </Switch>
       </BrowserRouter>
     </ApolloProvider>

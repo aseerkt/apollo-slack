@@ -3,7 +3,7 @@ type Error {
   message: String!
 }
 
-type Response {
+type DefaultResponse {
   ok: Boolean!
   errors: [Error!]
 }
