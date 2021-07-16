@@ -1,6 +1,7 @@
 import {
   signAccessToken,
   signRefreshToken,
+  signTokens,
   verifyAccessToken,
   verifyRefreshToken,
 } from './jwtHelper';
@@ -27,11 +28,10 @@ export function getCookieToken(req) {
 
 export function extractAndIssueTokens(req, res) {
   let userId;
-  let accessToken;
-  let refreshToken;
+
   try {
-    refreshToken = getCookieToken(req);
-    accessToken =
+    let refreshToken = getCookieToken(req);
+    let accessToken =
       req.headers.authorization &&
       req.headers.authorization.split('Bearer ')[1];
     console.log({ accessToken, refreshToken });
@@ -44,22 +44,25 @@ export function extractAndIssueTokens(req, res) {
           userId = accessPayload.userId;
         }
       } catch (err) {
-        console.log(err);
         // here access token may expire
         if (err.message === 'jwt expired') {
-          accessToken = signAccessToken(refreshPayload.userId);
-          refreshToken = signRefreshToken(refreshPayload.userId);
-          setTokenCookie(req, res);
+          console.log('acTkn expired');
+          const { accessToken, refreshToken } = signTokens(
+            refreshPayload.userId,
+          );
+          setTokenCookie(req, res, refreshToken);
+          res.setHeader('Access-Control-Expose-Headers', 'x-token');
+          res.setHeader('x-token', accessToken);
+          console.log(res.headers);
           userId = refreshPayload.userId;
         }
       }
     }
   } catch (err) {
-    // probably error related to jwt verification
+    // probably error related to refresh token
     console.log(err);
   }
   return {
     userId,
-    accessToken,
   };
 }

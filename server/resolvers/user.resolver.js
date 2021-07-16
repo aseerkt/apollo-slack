@@ -2,9 +2,13 @@ import formatErrors from '../utils/formatErrors';
 import bcrypt from 'bcryptjs';
 import { signAccessToken, signRefreshToken } from '../utils/jwtHelper';
 import { setTokenCookie } from '../utils/cookieHelper';
+import authenticated from '../utils/permissions';
 
 export default {
   Query: {
+    me: authenticated((root, args, { userId, db }) =>
+      db.User.findOne({ where: { id: userId } }),
+    ),
     getUser(root, { id }, { db }) {
       return db.User.findOne({ where: { id } });
     },

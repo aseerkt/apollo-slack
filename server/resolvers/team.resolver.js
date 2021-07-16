@@ -1,20 +1,16 @@
 import formatErrors from '../utils/formatErrors';
+import authenticated from '../utils/permissions';
 
 export default {
   Mutation: {
-    async createTeam(_root, args, { db, userId }) {
-      if (!userId)
-        return {
-          ok: false,
-          errors: [{ path: 'auth', message: 'Not Authenticated' }],
-        };
+    createTeam: authenticated(async function (_root, args, { db, userId }) {
       try {
-        await db.Team.create({ ...args, owner: userId });
+        await db.Team.create({ ...args, ownerId: userId });
         return { ok: true };
       } catch (err) {
         console.log(err);
         return { ok: false, errors: formatErrors(err) };
       }
-    },
+    }),
   },
 };

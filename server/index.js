@@ -7,11 +7,10 @@ import { ApolloServer } from 'apollo-server-express';
 import { CLIENT_URL, PORT, IS_PROD } from './constants.js';
 import schema from './schema.js';
 import sequelize from './db/index.js';
-import { extractAndIssueTokens, getCookieToken } from './utils/cookieHelper.js';
-import { verifyTokens } from './utils/jwtHelper';
+import { extractAndIssueTokens } from './utils/cookieHelper.js';
 
 async function startApolloServer() {
-  await sequelize.sync({ force: true });
+  await sequelize.sync();
 
   const server = new ApolloServer({
     schema,
