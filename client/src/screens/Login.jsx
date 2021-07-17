@@ -20,7 +20,8 @@ function Login() {
           console.log(data);
           if (user && accessToken) {
             saveAccessToken(accessToken);
-            // cache.writeQuery({ query: ME_QUERY, data: user });
+            console.log(user);
+            cache.writeQuery({ query: ME_QUERY, data: { me: user } });
             history.push('/');
           }
         },
