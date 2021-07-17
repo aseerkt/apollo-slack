@@ -34,7 +34,6 @@ export function extractAndIssueTokens(req, res) {
     let accessToken =
       req.headers.authorization &&
       req.headers.authorization.split('Bearer ')[1];
-    console.log({ accessToken, refreshToken });
 
     if (accessToken && refreshToken) {
       const refreshPayload = verifyRefreshToken(refreshToken);
@@ -53,7 +52,6 @@ export function extractAndIssueTokens(req, res) {
           setTokenCookie(req, res, refreshToken);
           res.setHeader('Access-Control-Expose-Headers', 'x-token');
           res.setHeader('x-token', accessToken);
-          console.log(res.headers);
           userId = refreshPayload.userId;
         }
       }

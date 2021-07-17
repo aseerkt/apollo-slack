@@ -1,0 +1,33 @@
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-areas:
+    'topnav topnav'
+    'sidebar channelmsgs'
+    'sidebar addmsg';
+  grid-template-rows: 38px auto 105px;
+  grid-template-columns: 220px auto;
+}
+
+.top-nav {
+  grid-area: topnav;
+  background-color: #350d36;
+  box-shadow: 0 1px 0 0 rgb(255 255 255 / 10%);
+}
+
+.sidebar {
+  grid-area: sidebar;
+  max-width: 220px;
+  overflow: auto;
+  background-color: #3f0e40;
+}
+
+.channel-messages {
+  grid-area: channelmsgs;
+}
+
+.add-msg-wrapper {
+  grid-area: addmsg;
+}

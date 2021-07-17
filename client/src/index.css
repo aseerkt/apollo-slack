@@ -1,0 +1,13 @@
+:root {
+  --purple: #3f0e40;
+  --purple-dark: #350d36;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+}

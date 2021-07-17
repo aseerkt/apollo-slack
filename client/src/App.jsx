@@ -5,6 +5,7 @@ import Home from './screens/Home';
 import Register from './screens/Register';
 import Login from './screens/Login';
 import CreateTeam from './screens/CreateTeam';
+import ViewTeam from './screens/ViewTeam';
 import useMeQuery from './hooks/apollo/queries/me';
 import AuthProvider from './components/AuthProvider';
 
@@ -29,6 +30,7 @@ function App() {
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
             <PrivateRoute exact path='/create-team' component={CreateTeam} />
+            <PrivateRoute path='/view-team' component={ViewTeam} />
           </Switch>
         </BrowserRouter>
       </AuthProvider>

@@ -1,5 +1,20 @@
+import {
+  AddMessageWrapper,
+  ChannelContent,
+  Sidebar,
+  TopNav,
+  AppLayout,
+} from '../layouts/SlackLayouts';
+
 function ViewTeam() {
-  return <div></div>;
+  return (
+    <AppLayout>
+      <TopNav />
+      <Sidebar />
+      <ChannelContent />
+      <AddMessageWrapper />
+    </AppLayout>
+  );
 }
 
 export default ViewTeam;
