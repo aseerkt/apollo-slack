@@ -22,14 +22,6 @@ export default function Home() {
 
       <Link to='/register'>Register</Link>
       <Link to='/login'>Login</Link>
-      <div>
-        <h2>Create a new Slack workspace</h2>
-        <p>
-          Slack gives your team a home — a place where they can talk and work
-          together. To create a new workspace, click the button below.
-        </p>
-        <Link to='/create-team'>Create WorkSpace</Link>
-      </div>
     </div>
   );
 }

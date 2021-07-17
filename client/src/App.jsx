@@ -8,6 +8,7 @@ import CreateTeam from './screens/CreateTeam';
 import ViewTeam from './screens/ViewTeam';
 import useMeQuery from './hooks/apollo/queries/me';
 import AuthProvider from './components/AuthProvider';
+import Dashboard from './screens/Dashboard';
 
 function PrivateRoute({ component: Component, ...rest }) {
   const { data } = useMeQuery();
@@ -29,6 +30,7 @@ function App() {
             <Route exact path='/' component={Home} />
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
+            <PrivateRoute exact path='/dashboard' component={Dashboard} />
             <PrivateRoute exact path='/create-team' component={CreateTeam} />
             <PrivateRoute path='/view-team' component={ViewTeam} />
           </Switch>

@@ -26,14 +26,14 @@ function CreateTeam() {
   };
 
   return (
-    <Formlayout title='Create team'>
+    <Formlayout title='Create Workspace'>
       <Form
         form={form}
         initialValues={{ name: '' }}
         layout='vertical'
         onFinish={onFinish}
       >
-        <Form.Item name='name' label='Team name'>
+        <Form.Item name='name' label='Workspace name'>
           <Input />
         </Form.Item>
 

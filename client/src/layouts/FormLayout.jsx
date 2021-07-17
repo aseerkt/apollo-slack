@@ -6,7 +6,9 @@ function Formlayout({ children, title }) {
     <Row>
       <Col style={{ margin: '1rem auto' }} md={{ span: 8 }}>
         <Card>
-          <Typography.Title level={2}>{title}</Typography.Title>
+          <Typography.Title level={2} style={{ fontWeight: 900 }}>
+            {title}
+          </Typography.Title>
           {children}
         </Card>
       </Col>

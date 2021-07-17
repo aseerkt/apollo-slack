@@ -15,7 +15,8 @@ export default function Logo({ color }) {
       <span
         style={{
           marginLeft: '0.5rem',
-          fontSize: '60%',
+          paddingBottom: '5px',
+          fontSize: '64%',
           fontWeight: 700,
           letterSpacing: '3.4px',
           opacity: 0.9,
