@@ -1,7 +1,20 @@
 import formatErrors from '../utils/formatErrors';
-import authenticated from '../utils/permissions';
+import { authenticated } from '../utils/permissions';
 
 export default {
+  Team: {
+    channels: function (root, args, { db }) {
+      return db.Channel.findAll({ where: { teamId: root.id } });
+    },
+  },
+  Query: {
+    allTeams: authenticated(function (_rootm, args, { db, userId }) {
+      return db.Team.findAll({ where: { ownerId: userId } });
+    }),
+    getTeam: authenticated(async function (root, args, { db, userId }) {
+      return db.Team.findOne({ where: { ownerId: userId, id: args.teamId } });
+    }),
+  },
   Mutation: {
     createTeam: authenticated(async function (_root, args, { db, userId }) {
       try {

@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-
-import teamWorkLogo from '../assets/undraw_creative_team_r90h.svg';
+import { Spin } from 'antd';
 import Container from '../layouts/Container';
 import Logo from '../shared/Logo';
+import useAllTeamsQuery from '../hooks/apollo/queries/allTeams';
+import teamWorkLogo from '../assets/undraw_creative_team_r90h.svg';
 
 const CreateTeamNav = styled.div`
   display: grid;
@@ -79,6 +80,11 @@ const OrDivider = styled.div`
 `;
 
 function Dashboard() {
+  const { data, loading } = useAllTeamsQuery();
+
+  if (loading) return <Spin size='large' />;
+  console.log(data);
+
   return (
     <Container
       style={{
@@ -106,6 +112,13 @@ function Dashboard() {
       <OrDivider>
         <span>OR</span>
       </OrDivider>
+      <div>
+        {data?.allTeams?.map((t) => (
+          <Link to={`/client/T${t.id}/C`}>
+            <strong>{t.name}</strong>
+          </Link>
+        ))}
+      </div>
     </Container>
   );
 }

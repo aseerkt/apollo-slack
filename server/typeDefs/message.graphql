@@ -3,8 +3,18 @@ type Message {
   text: String!
   user: User!
   channel: Channel!
+  createdAt: String!
+}
+
+type CreateMessageResponse {
+  message: Message
+  errors: [Error!]
+}
+
+type Query {
+  getMessages(channelId: Int!): [Message!]
 }
 
 type Mutation {
-  createMessage(channelId: Int!, text: String!): Boolean!
+  createMessage(channelId: Int!, text: String!): CreateMessageResponse!
 }

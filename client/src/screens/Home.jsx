@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
+import { Spin } from 'antd';
 import useAllUsersQuery from '../hooks/apollo/queries/allUsers';
 import Logo from '../shared/Logo';
 
 export default function Home() {
   const { data, loading } = useAllUsersQuery();
   if (loading) {
-    return <h1>Loading...</h1>;
+    return <Spin />;
   }
 
   return (
@@ -22,6 +23,7 @@ export default function Home() {
 
       <Link to='/register'>Register</Link>
       <Link to='/login'>Login</Link>
+      <Link to='/dashboard'>Dashboard</Link>
     </div>
   );
 }

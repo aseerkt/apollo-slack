@@ -1,4 +1,4 @@
-export default function authenticated(next) {
+export function authenticated(next) {
   return function (root, args, ctx, info) {
     if (!ctx.userId) {
       throw new Error(`Unauthenticated!`);

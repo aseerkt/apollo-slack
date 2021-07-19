@@ -33,6 +33,10 @@ function App() {
             <PrivateRoute exact path='/dashboard' component={Dashboard} />
             <PrivateRoute exact path='/create-team' component={CreateTeam} />
             <PrivateRoute path='/view-team' component={ViewTeam} />
+            <PrivateRoute
+              path='/client/T:teamId?/C:channelId?'
+              component={ViewTeam}
+            />
           </Switch>
         </BrowserRouter>
       </AuthProvider>

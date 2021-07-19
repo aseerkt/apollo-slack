@@ -1,10 +1,5 @@
-import {
-  signAccessToken,
-  signRefreshToken,
-  signTokens,
-  verifyAccessToken,
-  verifyRefreshToken,
-} from './jwtHelper';
+import { IS_PROD } from '../constants';
+import { signTokens, verifyAccessToken, verifyRefreshToken } from './jwtHelper';
 
 export const COOKIE_NAME = 'apollo-slack';
 
@@ -12,7 +7,7 @@ export function setTokenCookie(req, res, token) {
   // get url from cross site
   const origin = req.get('origin');
   // check if cross site request is coming from secure connection
-  const isSecure = origin ? origin.startsWith('https://') : false;
+  const isSecure = IS_PROD && origin && origin.startsWith('https://');
 
   res.cookie(COOKIE_NAME, token, {
     maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -37,12 +32,15 @@ export function extractAndIssueTokens(req, res) {
 
     if (accessToken && refreshToken) {
       const refreshPayload = verifyRefreshToken(refreshToken);
+      console.log('made it here');
       try {
         const accessPayload = verifyAccessToken(accessToken);
         if (accessPayload.userId === refreshPayload.userId) {
           userId = accessPayload.userId;
+          // console.log({ userId });
         }
       } catch (err) {
+        console.log(err);
         // here access token may expire
         if (err.message === 'jwt expired') {
           console.log('acTkn expired');
@@ -53,6 +51,7 @@ export function extractAndIssueTokens(req, res) {
           res.setHeader('Access-Control-Expose-Headers', 'x-token');
           res.setHeader('x-token', accessToken);
           userId = refreshPayload.userId;
+          console.log({ userId });
         }
       }
     }

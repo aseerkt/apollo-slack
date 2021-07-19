@@ -1,9 +1,35 @@
+import formatErrors from '../utils/formatErrors';
+import { authenticated } from '../utils/permissions';
+
 export default {
+  Query: {
+    getMessages: authenticated(function (root, { channelId }, { db }) {
+      return db.Message.findAll({
+        where: { channelId },
+        include: {
+          as: 'user',
+          model: db.User,
+        },
+      });
+    }),
+  },
   Mutation: {
-    async createMessage(root, args, { db }) {
+    createMessage: authenticated(async function (
+      root,
+      { channelId, text },
+      { db, userId },
+    ) {
       try {
-        await db.Message.create({ ...args });
-      } catch (err) {}
-    },
+        const message = await db.Message.create({
+          channelId,
+          text,
+          userId,
+        });
+        return { message };
+      } catch (err) {
+        console.log(err);
+        return { errors: formatErrors(err) };
+      }
+    }),
   },
 };

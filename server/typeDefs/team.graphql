@@ -6,6 +6,11 @@ type Team {
   channels: [Channel!]!
 }
 
+type Query {
+  allTeams: [Team!]!
+  getTeam(teamId: Int!): Team
+}
+
 type Mutation {
   createTeam(name: String!): DefaultResponse!
 }

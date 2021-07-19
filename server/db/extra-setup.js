@@ -20,7 +20,10 @@ export default function applyExtraSetup(sequelize) {
   });
 
   // message : user m:1
-  Message.belongsTo(User, { foreignKey: { name: 'userId', allowNull: false } });
+  Message.belongsTo(User, {
+    as: 'user',
+    foreignKey: { name: 'userId', allowNull: false },
+  });
 
   // team : memeber : user m:n
   Team.belongsToMany(User, {

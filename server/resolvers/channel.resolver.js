@@ -1,13 +1,15 @@
+import { authenticated } from '../utils/permissions';
+
 export default {
   Mutation: {
-    async createChannel(root, args, { db }) {
+    createChannel: authenticated(async function (root, args, { db, userId }) {
       try {
-        await db.Channel.create(args);
+        await db.Channel.create({ ...args, userId });
         return true;
       } catch (err) {
         console.log(err);
         return false;
       }
-    },
+    }),
   },
 };

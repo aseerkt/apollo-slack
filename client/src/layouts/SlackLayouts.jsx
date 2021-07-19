@@ -1,29 +1,38 @@
-import './SlackLayouts.css';
+import styled from 'styled-components';
 
 // Grid Layouts
 
-export function AppLayout({ children }) {
-  return <section className='wrapper'>{children}</section>;
-}
+export const AppLayout = styled.section`
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-areas:
+    'topnav topnav'
+    'sidebar channelmsgs'
+    'sidebar addmsg';
+  grid-template-rows: var(--top-nav-height) auto var(--add-msg-height);
+  grid-template-columns: var(--sidebar-width) auto;
+`;
 
-export function TopNav({ children }) {
-  return <header className='top-nav'>{children}</header>;
-}
+export const TopNav = styled.header`
+  grid-area: topnav;
+  background-color: #350d36;
+  box-shadow: 0 1px 0 0 rgb(255 255 255 / 10%);
+`;
 
-export function Sidebar({ children }) {
-  return <aside className='sidebar'>{children}</aside>;
-}
+export const Sidebar = styled.aside`
+  grid-area: sidebar;
+  overflow: auto;
+  background-color: #3f0e40;
+`;
 
-export function ChannelContent({ children }) {
-  return <main className='channel-content'>{children}</main>;
-}
+export const ChannelContent = styled.section`
+  grid-area: channelmsgs;
+  display: flex;
+  flex-direction: column;
+`;
 
-export function AddMessageWrapper({ children }) {
-  return <div className='add-msg-wrapper'>{children}</div>;
-}
-
-// Childrens of layouts
-
-export function ChannelHeader({ children }) {
-  return <header className='channel-header'>{children}</header>;
-}
+export const AddMessageWrapper = styled.div`
+  grid-area: addmsg;
+`;

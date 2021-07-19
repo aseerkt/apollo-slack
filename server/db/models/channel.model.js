@@ -9,9 +9,9 @@ export default function (sequelize) {
         unique: true,
         allowNull: false,
       },
-      pulic: {
+      private: {
         type: DataTypes.BOOLEAN,
-        default: true,
+        default: false,
         allowNull: false,
       },
     },

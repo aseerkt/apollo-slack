@@ -2,6 +2,13 @@
   --purple: #3f0e40;
   --purple-dark: #350d36;
   --purple-light: #611f69;
+  --tch-height: 50px;
+  --sidebar-width: 243px;
+  --top-nav-height: 38px;
+  --add-msg-height: 105px;
+  --msg-content-height: calc(
+    var(--add-msg-height) + var(--top-nav-height) + var(--tch-height)
+  );
 }
 
 * {
@@ -11,4 +18,5 @@
 
 body {
   font-family: 'Lato', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }

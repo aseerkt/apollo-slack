@@ -4,6 +4,9 @@ import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import { ApolloServer } from 'apollo-server-express';
+const {
+  ApolloServerPluginLandingPageGraphQLPlayground,
+} = require('apollo-server-core');
 import { CLIENT_URL, PORT, IS_PROD } from './constants.js';
 import schema from './schema.js';
 import sequelize from './db/index.js';
@@ -18,6 +21,7 @@ async function startApolloServer() {
       const { userId } = extractAndIssueTokens(req, res);
       return { req, res, db: sequelize.models, userId };
     },
+    plugins: [!IS_PROD && ApolloServerPluginLandingPageGraphQLPlayground()],
   });
   await server.start();
 
@@ -25,7 +29,7 @@ async function startApolloServer() {
 
   app.use(
     cors({
-      origin: [CLIENT_URL, !IS_PROD && 'https://studio.apollographql.com'],
+      origin: [CLIENT_URL],
       credentials: true,
     }),
   );
