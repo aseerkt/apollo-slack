@@ -92,7 +92,7 @@ export const ToggleTeamOptionsButton = styled.button`
   outline: none;
   font-weight: 900;
   font-size: 18px;
-
+  flex: 1;
   i {
     display: flex;
     justify-content: center;

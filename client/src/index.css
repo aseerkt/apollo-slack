@@ -5,7 +5,7 @@
   --tch-height: 50px;
   --sidebar-width: 243px;
   --top-nav-height: 38px;
-  --add-msg-height: 105px;
+  --add-msg-height: 95px;
   --msg-content-height: calc(
     var(--add-msg-height) + var(--top-nav-height) + var(--tch-height)
   );

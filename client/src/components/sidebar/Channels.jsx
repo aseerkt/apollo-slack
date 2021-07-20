@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import IconButton from '../../shared/IconButton';
 import AddChannel from './AddChannel';
 import {
+  AddChannelBtn,
   ChannelNavLi,
   ChannelNavUl,
   PaddingXBtn,
@@ -31,8 +32,10 @@ function Channels({ channels }) {
           </Link>
         ))}
         <AddChannel>
-          <IconButton fasClass='fas fa-plus' filled size='small' />
-          <span>Add Channel</span>
+          <AddChannelBtn>
+            <IconButton fasClass='fas fa-plus' filled size='small' />
+            <span>Add Channel</span>
+          </AddChannelBtn>
         </AddChannel>
       </ChannelNavUl>
     </>

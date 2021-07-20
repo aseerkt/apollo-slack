@@ -7,7 +7,7 @@ import { NEW_MESSAGE_SUBSCRIPTION } from '../../hooks/apollo/subscriptions/getNe
 
 const MessagesContainer = styled.div`
   height: calc(100vh - var(--msg-content-height));
-  padding: 0 1rem;
+  padding: 1rem;
   overflow: auto;
   display: flex;
   flex-direction: column-reverse;
@@ -53,7 +53,7 @@ function MessageItem({
 }) {
   return (
     <MessageStyled>
-      <Avatar src={avatar} />
+      <Avatar shape='square' src={avatar} />
       <MessageContent>
         <MessageDetail>
           <strong>{username}</strong>

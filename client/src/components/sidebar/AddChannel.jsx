@@ -36,7 +36,7 @@ function AddChannel({ children }) {
 
   return (
     <>
-      <AddChannelBtn onClick={openModal}>{children}</AddChannelBtn>
+      <div onClick={openModal}>{children}</div>
       <Modal
         title='Create a channel'
         visible={open}

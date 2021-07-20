@@ -10,7 +10,7 @@ import {
   TopNav,
   AppLayout,
 } from '../layouts/SlackLayouts';
-import AddMessage from '../components/message-section/AddMessage';
+import AddChannelMessage from '../components/message-section/AddMessage';
 import ChannelMessages from '../components/message-section/ChannelMessages';
 
 function ViewTeam() {
@@ -30,7 +30,7 @@ function ViewTeam() {
         <ChannelMessages />
       </ChannelContent>
       <AddMessageWrapper>
-        <AddMessage />
+        <AddChannelMessage />
       </AddMessageWrapper>
     </AppLayout>
   );

@@ -11,18 +11,39 @@ export const AddMessageStyled = styled.div`
 export const AddChatInputWrapper = styled.div`
   display: flex;
   align-items: center;
+  height: 100%;
 
   .text-form-item {
     flex: 1;
+    display: inline-block;
+    height: 100%;
   }
 
+  .ant-form-item {
+    margin-bottom: 0;
+    height: 100%;
+  }
+  .ant-form-item-control {
+    height: 100%;
+
+    .ant-form-item-control-input {
+      height: 100%;
+
+      .ant-form-item-control-input-content {
+        height: 100%;
+        input {
+          display: flex;
+        }
+      }
+    }
+  }
   button {
     margin-left: 1rem;
     height: 100%;
   }
 `;
 
-const AddMessage = () => {
+const AddChannelMessage = () => {
   const [form] = Form.useForm();
   const { currentChannel } = useGetTeamInfo();
 
@@ -44,7 +65,13 @@ const AddMessage = () => {
 
   return (
     <AddMessageStyled>
-      <Form form={form} onFinish={onFinish} initialValues={{ text: '' }}>
+      <Form
+        style={{ height: '100%' }}
+        form={form}
+        onFinish={onFinish}
+        initialValues={{ text: '' }}
+        size='large'
+      >
         <AddChatInputWrapper>
           <Form.Item
             className='text-form-item'
@@ -55,12 +82,10 @@ const AddMessage = () => {
               },
             ]}
           >
-            <Input.TextArea
-              placeholder={`Send a message #${
-                currentChannel?.name || 'welcome'
-              }`}
+            <Input
+              style={{ height: '100%' }}
+              placeholder={`Send a message to #${currentChannel?.name}`}
               required
-              rows={3}
             />
           </Form.Item>
           <Form.Item>
@@ -77,4 +102,4 @@ const AddMessage = () => {
   );
 };
 
-export default AddMessage;
+export default AddChannelMessage;

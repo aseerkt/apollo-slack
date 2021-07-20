@@ -1,7 +1,7 @@
 import { genSalt, hash } from 'bcryptjs';
 
 export default function applyExtraSetup(sequelize) {
-  const { Team, Channel, Message, User } = sequelize.models;
+  const { Team, Channel, Message, User, TeamInvite } = sequelize.models;
 
   // RELATIONS
 
@@ -21,6 +21,18 @@ export default function applyExtraSetup(sequelize) {
 
   // message : user m:1
   Message.belongsTo(User, {
+    as: 'user',
+    foreignKey: { name: 'userId', allowNull: false },
+  });
+
+  // team : invite 1:m
+  TeamInvite.belongsTo(Team, {
+    as: 'team',
+    foreignKey: { name: 'teamId', allowNull: false },
+  });
+
+  // invite : user m:1
+  TeamInvite.belongsTo(User, {
     as: 'user',
     foreignKey: { name: 'userId', allowNull: false },
   });

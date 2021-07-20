@@ -6,13 +6,11 @@ export default function (sequelize) {
     {
       name: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
       },
       private: {
         type: DataTypes.BOOLEAN,
         default: false,
-        allowNull: false,
       },
     },
     { timestamps: true, tableName: 'channels' },

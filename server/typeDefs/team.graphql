@@ -6,11 +6,20 @@ type Team {
   channels: [Channel!]!
 }
 
+type TeamInvite {
+  userId: Int!
+  teamId: Int!
+  user: User!
+  team: Team!
+}
+
 type Query {
   allTeams: [Team!]!
   getTeam(teamId: Int!): Team
+  getTeamInvites: [TeamInvite!]
 }
 
 type Mutation {
   createTeam(name: String!): DefaultResponse!
+  inviteTeamMember(email: String!, teamId: Int!): Boolean!
 }
