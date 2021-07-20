@@ -54,9 +54,7 @@ async function startApolloServer() {
       `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`,
     ),
   );
-  console.log(
-    chalk.yellow.bold(`Subscriptions are at ${subServer.server.path}`),
-  );
+
   return { server, app };
 }
 

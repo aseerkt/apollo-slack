@@ -29,8 +29,8 @@ export default {
           as: 'user',
           model: db.User,
         },
+        order: [['createdAt', 'DESC']],
       });
-      console.log({ messages });
       return messages;
     }),
   },

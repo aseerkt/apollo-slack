@@ -34,8 +34,12 @@ const AddMessage = () => {
       const res = await addMessage({
         variables: { channelId: currentChannel.id, ...values },
       });
-      console.log(res);
-    } catch (err) {}
+      if (res.data?.createMessage.message) {
+        form.resetFields();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

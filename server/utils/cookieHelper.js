@@ -40,7 +40,7 @@ export function extractAndIssueTokens(req, res) {
           // console.log({ userId });
         }
       } catch (err) {
-        console.log(err);
+        console.log(err.message);
         // here access token may expire
         if (err.message === 'jwt expired') {
           console.log('acTkn expired');
