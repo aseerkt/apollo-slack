@@ -1,5 +1,5 @@
 import formatErrors from '../utils/formatErrors';
-import { authenticated } from '../utils/permissions';
+import { requiresAuth } from '../utils/permissions';
 
 export default {
   Team: {
@@ -8,15 +8,15 @@ export default {
     },
   },
   Query: {
-    allTeams: authenticated(function (_rootm, args, { db, userId }) {
+    allTeams: requiresAuth(function (_rootm, args, { db, userId }) {
       return db.Team.findAll({ where: { ownerId: userId } });
     }),
-    getTeam: authenticated(async function (root, args, { db, userId }) {
+    getTeam: requiresAuth(async function (root, args, { db, userId }) {
       return db.Team.findOne({ where: { ownerId: userId, id: args.teamId } });
     }),
   },
   Mutation: {
-    createTeam: authenticated(async function (_root, args, { db, userId }) {
+    createTeam: requiresAuth(async function (_root, args, { db, userId }) {
       try {
         await db.Team.create({ ...args, ownerId: userId });
         return { ok: true };

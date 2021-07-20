@@ -1,31 +1,67 @@
 import formatErrors from '../utils/formatErrors';
-import { authenticated } from '../utils/permissions';
+import { requiresAuth } from '../utils/permissions';
+import { PubSub, withFilter } from 'graphql-subscriptions';
+
+const NEW_CHANNEL_MESSAGE = 'NEW_CHANNEL_MESSAGE';
+
+const pubsub = new PubSub();
 
 export default {
+  Message: {
+    user: ({ user, userId }, args, { db }) => {
+      if (user) return user;
+      return db.User.finOne({ where: { id: userId } });
+    },
+  },
+  Subscription: {
+    newChannelMessage: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(NEW_CHANNEL_MESSAGE),
+        (payload, args) => payload.channelId === args.channelId,
+      ),
+    },
+  },
   Query: {
-    getMessages: authenticated(function (root, { channelId }, { db }) {
-      return db.Message.findAll({
+    getMessages: requiresAuth(async function (root, { channelId }, { db }) {
+      const messages = await db.Message.findAll({
         where: { channelId },
         include: {
           as: 'user',
           model: db.User,
         },
       });
+      console.log({ messages });
+      return messages;
     }),
   },
   Mutation: {
-    createMessage: authenticated(async function (
+    createMessage: requiresAuth(async function (
       root,
       { channelId, text },
       { db, userId },
     ) {
       try {
-        const message = await db.Message.create({
+        const message = await db.Message.create(
+          {
+            channelId,
+            text,
+            userId,
+          },
+          { raw: true },
+        );
+
+        console.log({ message: message.dataValues });
+
+        const currentUser = await db.User.findOne({ where: { id: userId } });
+
+        pubsub.publish(NEW_CHANNEL_MESSAGE, {
           channelId,
-          text,
-          userId,
+          newChannelMessage: {
+            ...message.dataValues,
+            user: currentUser.dataValues,
+          },
         });
-        return { message };
+        return { message: message.dataValues };
       } catch (err) {
         console.log(err);
         return { errors: formatErrors(err) };

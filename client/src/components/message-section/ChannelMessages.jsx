@@ -65,7 +65,7 @@ function MessageItem({
 
 function ChannelMessages() {
   const { channelId } = useParams();
-  const { data, loading } = useGetMessagesQuery({
+  const { data, loading, subscribeToMore } = useGetMessagesQuery({
     variables: { channelId: parseInt(channelId) },
   });
 
