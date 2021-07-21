@@ -17,6 +17,27 @@
 }
 
 body {
+  overflow-x: hidden;
+  width: 100vw;
+
   font-family: 'Lato', sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+.ant-modal-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.ant-card {
+  box-shadow: -11px 11px 14px -11px rgba(27, 120, 151, 0.75);
+  -webkit-box-shadow: -11px 11px 14px -11px rgba(27, 120, 151, 0.75);
+  -moz-box-shadow: -11px 11px 14px -11px rgba(27, 120, 151, 0.75);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 900;
 }

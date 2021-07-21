@@ -51,7 +51,6 @@ export function extractAndIssueTokens(req, res) {
           res.setHeader('Access-Control-Expose-Headers', 'x-token');
           res.setHeader('x-token', accessToken);
           userId = refreshPayload.userId;
-          console.log({ userId });
         }
       }
     }

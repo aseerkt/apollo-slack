@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Modal, Form, Input, Switch } from 'antd';
 import { useParams } from 'react-router-dom';
 import useCreateChannelMutation from '../../hooks/apollo/mutations/createChannel';
-import { AddChannelBtn } from './styles/SidebarStyles';
 import { GET_TEAM_QUERY } from '../../hooks/apollo/queries/getTeam';
 
 function AddChannel({ children }) {

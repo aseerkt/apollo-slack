@@ -95,8 +95,6 @@ function ChannelMessages() {
 
   if (!channelId || loading) return null;
 
-  console.log(data);
-
   return (
     <MessagesContainer>
       {data?.getMessages?.map((m) => (

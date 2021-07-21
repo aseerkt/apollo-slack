@@ -33,17 +33,17 @@ const TeamHeader = ({ teamName }) => {
         <AddChannel>Create a channel</AddChannel>
       </Menu.Item>
       <Menu.Item key='3'>Sign out of {teamName}</Menu.Item>
-      <SubMenu title='Add workspaces'>
-        <Menu.Item key='4'>Sign in to another workspace</Menu.Item>
+      <SubMenu key='4' title='Add workspaces'>
+        <Menu.Item key='5'>Sign in to another workspace</Menu.Item>
         <Menu.Item
-          key='5'
+          key='6'
           onClick={() => {
             history.push('/create-team');
           }}
         >
           Create a new workspace
         </Menu.Item>
-        <Menu.Item key='6' onClick={() => history.push('/dashboard')}>
+        <Menu.Item key='7' onClick={() => history.push('/dashboard')}>
           Find workspaces
         </Menu.Item>
       </SubMenu>

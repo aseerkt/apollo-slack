@@ -3,16 +3,10 @@ import { gql, useMutation } from '@apollo/client';
 const INVITE_TEAM_MEMBER_MUTATION = gql`
   mutation InviteTeamMember($email: String!, $teamId: Int!) {
     inviteTeamMember(email: $email, teamId: $teamId) {
-      id
-      createdAt
-      teamId
-      team {
-        id
-        name
-        owner {
-          username
-          email
-        }
+      ok
+      errors {
+        path
+        message
       }
     }
   }

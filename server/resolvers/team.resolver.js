@@ -61,18 +61,31 @@ export default {
         const team = await db.Team.findOne({
           where: { ownerId: userId, id: teamId },
         });
-        if (!team) return false;
+        if (!team)
+          return {
+            errors: [{ path: 'unknown', message: 'Something went wrong' }],
+          };
         const user = await db.User.findOne({ where: { email } });
-        if (!user) return false;
-        if (user.id === parseInt(userId)) return false;
+        // to protect from spammers
+        if (!user) return { ok: true };
+        if (user.id === userId)
+          return {
+            ok: false,
+            errors: [
+              {
+                path: 'email',
+                message: 'Already a member',
+              },
+            ],
+          };
         await db.TeamInvite.create({
           userId: user.id,
           teamId: team.id,
         });
-        return true;
+        return { ok: true };
       } catch (err) {
         console.log(err);
-        return false;
+        return { ok: false, errors: formatErrors(err) };
       }
     }),
   },
