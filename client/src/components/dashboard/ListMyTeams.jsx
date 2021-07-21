@@ -4,17 +4,36 @@ import styled from 'styled-components';
 import useAllTeamsQuery from '../../hooks/apollo/queries/allTeams';
 import useMeQuery from '../../hooks/apollo/queries/me';
 
+const TeamList = styled.section`
+  width: '100%';
+  padding: 3rem 0;
+  text-align: center;
+
+  .ant-card {
+    border-radius: 6px;
+  }
+
+  .ant-card-body {
+    padding: 0;
+  }
+`;
+
 const TeamLink = styled(Link)`
   display: flex;
   align-items: center;
   text-align: left;
+  transition: all 0.4s ease;
+  margin-right: 0.4rem;
+  padding: 1rem 1.5rem;
 
   .open-span {
+    transition: inherit;
     display: none;
     margin-right: 0.4rem;
   }
 
   &:hover {
+    margin-right: 0;
     background-color: rgba(0, 0, 0, 0.04);
     .open-span {
       display: inline-block;
@@ -40,6 +59,11 @@ const TeamTitle = styled.h3`
   font-size: 1.2rem;
 `;
 
+const TeamOpenLink = styled.div`
+  margin-left: auto;
+  font-size: 1rem;
+`;
+
 function ListMyTeams() {
   const { data, loading } = useAllTeamsQuery();
   const {
@@ -49,7 +73,7 @@ function ListMyTeams() {
   if (loading) return <Spin size='large' />;
 
   return (
-    <div style={{ width: '100%', padding: '3rem 0', textAlign: 'center' }}>
+    <TeamList style={{ width: '100%', padding: '3rem 0', textAlign: 'center' }}>
       <h2>Open a workspace</h2>
       <Card
         hoverable
@@ -62,21 +86,25 @@ function ListMyTeams() {
         loading={loading}
       >
         {data?.allTeams?.map((t) => (
-          <TeamLink to={`/client/T${t.id}/C`} style={{}}>
+          <TeamLink
+            key={`/client/T${t.id}/C`}
+            to={`/client/T${t.id}/C`}
+            style={{}}
+          >
             <TeamAvatar>
               <strong>{t.name[0].toUpperCase()}</strong>
             </TeamAvatar>
             <TeamTitle>
               <>{t.name}</>
             </TeamTitle>
-            <div style={{ marginLeft: 'auto' }}>
+            <TeamOpenLink>
               <span className='open-span'>Open</span>
               <i className='fas fa-arrow-right'></i>
-            </div>
+            </TeamOpenLink>
           </TeamLink>
         ))}
       </Card>
-    </div>
+    </TeamList>
   );
 }
 

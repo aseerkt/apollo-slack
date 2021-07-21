@@ -30,9 +30,16 @@ body {
 }
 
 .ant-card {
-  box-shadow: -11px 11px 14px -11px rgba(27, 120, 151, 0.75);
-  -webkit-box-shadow: -11px 11px 14px -11px rgba(27, 120, 151, 0.75);
-  -moz-box-shadow: -11px 11px 14px -11px rgba(27, 120, 151, 0.75);
+  box-shadow: -9px 9px 9px -7px rgba(27, 120, 151, 0.75);
+  -webkit-box-shadow: -9px 9px 9px -7px rgba(27, 120, 151, 0.75);
+  -moz-box-shadow: -9px 9px 9px -7px rgba(27, 120, 151, 0.75);
+  border-color: #ccc;
+  border-radius: 6px;
+}
+
+.ant-card-head {
+  border-color: #ccc;
+  text-align: left;
 }
 
 h1,

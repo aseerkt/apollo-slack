@@ -7,6 +7,8 @@ type Team {
 }
 
 type TeamInvite {
+  id: Int!
+  createdAt: String!
   userId: Int!
   teamId: Int!
   user: User!
