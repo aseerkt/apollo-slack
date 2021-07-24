@@ -35,7 +35,9 @@ async function startApolloServer() {
       const { userId } = extractAndIssueTokens(req, res);
       return { req, res, db: sequelize.models, userId };
     },
-    plugins: [!IS_PROD && ApolloServerPluginLandingPageGraphQLPlayground()],
+    ...(!IS_PROD
+      ? { plugins: [ApolloServerPluginLandingPageGraphQLPlayground()] }
+      : {}),
   });
 
   await server.start();
