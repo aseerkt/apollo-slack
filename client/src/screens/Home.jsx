@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-
+import useMeQuery from '../hooks/apollo/queries/me';
 import Logo from '../shared/Logo';
 
 export default function Home() {
