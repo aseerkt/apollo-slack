@@ -4,16 +4,15 @@ import { signAccessToken, signRefreshToken } from '../utils/jwtHelper';
 import { setTokenCookie } from '../utils/cookieHelper';
 
 export default {
+  User: {
+    email: function ({ email }, { userId }) {
+      return id === userId ? email : '';
+    },
+  },
   Query: {
     me: (root, args, { userId, db }) => {
       if (!userId) return null;
       return db.User.findOne({ where: { id: userId } });
-    },
-    getUser(root, { id }, { db }) {
-      return db.User.findOne({ where: { id } });
-    },
-    allUsers(root, args, { db }) {
-      return db.User.findAll();
     },
   },
   Mutation: {

@@ -1,6 +1,7 @@
 import { Button, Form, Input } from 'antd';
 import { useHistory } from 'react-router-dom';
 import useCreateTeamMutation from '../hooks/apollo/mutations/createTeam';
+import { ALL_TEAMS_QUERY } from '../hooks/apollo/queries/allTeams';
 import Formlayout from '../layouts/FormLayout';
 import toErrorMap from '../utils/toErrorMap';
 
@@ -11,11 +12,14 @@ function CreateTeam() {
 
   const onFinish = async function (values) {
     try {
-      const res = await createTeam({ variables: values });
+      const res = await createTeam({
+        variables: values,
+        refetchQueries: [{ query: ALL_TEAMS_QUERY }],
+      });
       console.log(res);
-      const { ok, errors } = res.data?.createTeam;
-      if (ok) {
-        history.push('/');
+      const { teamId, errors } = res.data?.createTeam;
+      if (teamId) {
+        history.push(`/client/T${teamId}/C`);
       }
       if (errors) {
         form.setFields(toErrorMap(errors));

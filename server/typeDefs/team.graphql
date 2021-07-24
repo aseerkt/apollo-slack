@@ -22,8 +22,13 @@ type Query {
   getTeamInvites: [TeamInvite!]
 }
 
+type CreateTeamResponse {
+  teamId: Int!
+  errors: [Error!]
+}
+
 type Mutation {
-  createTeam(name: String!): DefaultResponse!
+  createTeam(name: String!): CreateTeamResponse!
   inviteTeamMember(email: String!, teamId: Int!): DefaultResponse!
   acceptTeamInvitation(teamId: Int!): Boolean!
 }

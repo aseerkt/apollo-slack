@@ -93,7 +93,7 @@ export default {
             { transaction: t },
           );
         });
-        return { ok: true };
+        return { teamId: team.id };
       } catch (err) {
         console.log(err);
         return { ok: false, errors: formatErrors(err) };
@@ -110,6 +110,7 @@ export default {
         });
         if (!team)
           return {
+            ok: false,
             errors: [{ path: 'unknown', message: 'Something went wrong' }],
           };
         const user = await db.User.findOne({ where: { email } });
