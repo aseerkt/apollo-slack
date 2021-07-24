@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Button } from 'antd';
+import { Modal, Form, Input } from 'antd';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useInviteTeamMemberMutation from '../../hooks/apollo/mutations/inviteTeamMember';
@@ -60,6 +60,7 @@ function InviteTeamMember({ children, teamName }) {
           >
             <Input placeholder='name@gmail.com' />
           </Form.Item>
+          {loading && <p>Inviting...</p>}
         </Form>
       </Modal>
     </>
