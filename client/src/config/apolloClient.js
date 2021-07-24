@@ -45,7 +45,7 @@ const authLink = setContext((_, { headers }) => {
 const httpLinkMiddleware = afterWareLink.concat(authLink.concat(httpLink));
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:5000/graphql',
+  uri: `${API_URL.replace('http', 'ws')}/graphql`,
   options: {
     reconnect: true,
     connectionParams: {
