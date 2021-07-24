@@ -44,7 +44,7 @@ async function startApolloServer() {
 
   server.applyMiddleware({ app, cors: false });
 
-  const subServer = SubscriptionServer.create(
+  SubscriptionServer.create(
     { schema, execute, subscribe },
     { server: httpServer, path: server.graphqlPath },
   );
