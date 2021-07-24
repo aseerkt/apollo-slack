@@ -9,10 +9,6 @@ const TeamList = styled.section`
   padding: 3rem 0;
   text-align: center;
 
-  .ant-card {
-    border-radius: 6px;
-  }
-
   .ant-card-body {
     padding: 0;
   }

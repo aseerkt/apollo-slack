@@ -32,7 +32,6 @@ export function extractAndIssueTokens(req, res) {
 
     if (accessToken && refreshToken) {
       const refreshPayload = verifyRefreshToken(refreshToken);
-      console.log('made it here');
       try {
         const accessPayload = verifyAccessToken(accessToken);
         if (accessPayload.userId === refreshPayload.userId) {

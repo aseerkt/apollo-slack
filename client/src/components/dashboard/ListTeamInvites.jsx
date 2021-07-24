@@ -1,5 +1,7 @@
 import { Button, Card, Spin } from 'antd';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
+import useAcceptTeamInvitationMutation from '../../hooks/apollo/mutations/acceptTeamInvitation';
 import useGetTeamInvitesQuery from '../../hooks/apollo/queries/getTeamInvites';
 import useMeQuery from '../../hooks/apollo/queries/me';
 
@@ -50,17 +52,31 @@ const TeamTitle = styled.h3`
 `;
 
 function ListTeamInvites() {
+  const history = useHistory();
   const { data, loading } = useGetTeamInvitesQuery();
+  const [acceptTeamInvitation, { loading: accepting }] =
+    useAcceptTeamInvitationMutation();
   const {
     data: { me },
   } = useMeQuery();
-
-  console.log(data);
 
   if (loading) return <Spin size='large' />;
 
   if (!loading && (!data?.getTeamInvites || data?.getTeamInvites.length === 0))
     return null;
+
+  const acceptInvite = (teamId) => async () => {
+    try {
+      alert(teamId);
+      const res = await acceptTeamInvitation({ variables: { teamId } });
+      console.log(res);
+      if (res.data?.acceptTeamInvitation) {
+        history.push(`/client/T${teamId}/C`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div style={{ width: '100%', padding: '3rem 0', textAlign: 'center' }}>
@@ -89,7 +105,9 @@ function ListTeamInvites() {
                 <>{t.name}</>
               </TeamTitle>
               <div style={{ marginLeft: 'auto' }}>
-                <Button>Join</Button>
+                <Button loading={accepting} onClick={acceptInvite(t.id)}>
+                  Join
+                </Button>
               </div>
             </TeamItem>
           </div>

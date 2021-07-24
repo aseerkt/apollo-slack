@@ -2,6 +2,7 @@ type Team {
   id: Int!
   name: String!
   owner: User!
+  ownerId: Int!
   members: [User!]!
   channels: [Channel!]!
 }
@@ -24,4 +25,5 @@ type Query {
 type Mutation {
   createTeam(name: String!): DefaultResponse!
   inviteTeamMember(email: String!, teamId: Int!): DefaultResponse!
+  acceptTeamInvitation(teamId: Int!): Boolean!
 }

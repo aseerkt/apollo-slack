@@ -1,19 +1,67 @@
 import sequelize from '../db';
 import formatErrors from '../utils/formatErrors';
 import { requiresAuth } from '../utils/permissions';
+import { Op } from 'sequelize';
 
 export default {
   Team: {
     channels: function (root, args, { db }) {
       return db.Channel.findAll({ where: { teamId: root.id } });
     },
+    members: function ({ id }, args, { db }) {
+      return db.User.findAll({
+        include: {
+          model: db.Team,
+          as: 'memberTeam',
+          where: { id },
+          attributes: [],
+        },
+      });
+    },
   },
   Query: {
     allTeams: requiresAuth(function (_rootm, args, { db, userId }) {
-      return db.Team.findAll({ where: { ownerId: userId } });
+      return db.Team.findAll({
+        where: {
+          [Op.or]: [{ ownerId: userId }, { '$memberUser.id$': userId }],
+        },
+        include: [
+          {
+            as: 'memberUser',
+            model: db.User,
+            attributes: [],
+            through: {
+              attributes: [],
+              where: { userId },
+            },
+          },
+        ],
+      });
     }),
-    getTeam: requiresAuth(async function (root, args, { db, userId }) {
-      return db.Team.findOne({ where: { ownerId: userId, id: args.teamId } });
+    getTeam: requiresAuth(async function (root, { teamId }, { db, userId }) {
+      return db.Team.findOne({
+        where: {
+          id: teamId,
+          [Op.or]: [
+            {
+              '$memberUser.id$': userId,
+            },
+            {
+              ownerId: userId,
+            },
+          ],
+        },
+        include: [
+          {
+            attributes: [],
+            as: 'memberUser',
+            model: db.User,
+            through: {
+              where: { userId, teamId },
+            },
+          },
+        ],
+      });
     }),
     getTeamInvites: requiresAuth(function (root, args, { db, userId }) {
       return db.TeamInvite.findAll({
@@ -31,24 +79,23 @@ export default {
   },
   Mutation: {
     createTeam: requiresAuth(async function (_root, args, { db, userId }) {
-      const t = await sequelize.transaction();
       try {
-        const team = await db.Team.create(
-          { ...args, ownerId: userId },
-          { transaction: t },
-        );
-        await db.Channel.bulkCreate(
-          [
-            { teamId: team.id, name: 'general', private: false },
-            { teamId: team.id, name: 'random', private: false },
-          ],
-          { transaction: t },
-        );
-        await t.commit();
+        await sequelize.transaction(async function (t) {
+          const team = await db.Team.create(
+            { ...args, ownerId: userId },
+            { transaction: t },
+          );
+          await db.Channel.bulkCreate(
+            [
+              { teamId: team.id, name: 'general', private: false },
+              { teamId: team.id, name: 'random', private: false },
+            ],
+            { transaction: t },
+          );
+        });
         return { ok: true };
       } catch (err) {
         console.log(err);
-        await t.rollback();
         return { ok: false, errors: formatErrors(err) };
       }
     }),
@@ -86,6 +133,33 @@ export default {
       } catch (err) {
         console.log(err);
         return { ok: false, errors: formatErrors(err) };
+      }
+    }),
+    acceptTeamInvitation: requiresAuth(async function (
+      root,
+      { teamId },
+      { db, userId },
+    ) {
+      console.log(teamId, userId);
+      try {
+        const invitation = db.TeamInvite.findOne({
+          where: {
+            teamId,
+            userId,
+          },
+        });
+        if (!invitation) return false;
+        await sequelize.transaction(async function (t) {
+          await db.Member.create({ teamId, userId }, { transaction: t });
+          await db.TeamInvite.destroy(
+            { where: { userId, teamId } },
+            { transaction: t },
+          );
+        });
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
       }
     }),
   },

@@ -16,7 +16,7 @@ import sequelize from './db/index.js';
 import { extractAndIssueTokens } from './utils/cookieHelper.js';
 
 async function startApolloServer() {
-  await sequelize.sync();
+  await sequelize.sync({});
 
   const app = express();
 
@@ -37,6 +37,7 @@ async function startApolloServer() {
     },
     plugins: [!IS_PROD && ApolloServerPluginLandingPageGraphQLPlayground()],
   });
+
   await server.start();
 
   app.use(cookieParser());
