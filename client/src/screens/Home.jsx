@@ -113,7 +113,11 @@ export default function Home() {
 
           <nav>
             {data?.me ? (
-              <Link to='/create-team'>Create Workspace</Link>
+              <NavLinks>
+                <Link className='cta' to='/create-team'>
+                  Create Workspace
+                </Link>
+              </NavLinks>
             ) : (
               <NavLinks>
                 <Link to='/register'>Register</Link>
