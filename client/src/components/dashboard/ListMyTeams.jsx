@@ -81,6 +81,9 @@ function ListMyTeams() {
         }
         loading={loading}
       >
+        {data?.allTeams?.length === 0 && (
+          <div>You are not logged into any workspaces</div>
+        )}
         {data?.allTeams?.map((t) => (
           <TeamLink
             key={`/client/T${t.id}/C`}

@@ -7,6 +7,7 @@ export default function Logo({ color }) {
         alignItems: 'center',
         height: '32px',
         color: fillColor,
+        marginBottom: 0,
       }}
     >
       <svg viewBox='0 0 816 240' fill={fillColor} height={32}>
