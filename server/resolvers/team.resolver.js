@@ -1,6 +1,6 @@
 import sequelize from '../db';
 import formatErrors from '../utils/formatErrors';
-import { requiresAuth } from '../utils/permissions';
+import { isTeamOwner, requiresAuth } from '../utils/permissions';
 import { Op } from 'sequelize';
 
 export default {
@@ -99,15 +99,26 @@ export default {
         return { ok: false, errors: formatErrors(err) };
       }
     }),
-    inviteTeamMember: requiresAuth(async function (
+    inviteTeamMember: isTeamOwner(async function (
       root,
       { email, teamId },
       { db, userId },
     ) {
       try {
-        const team = await db.Team.findOne({
-          where: { ownerId: userId, id: teamId },
-        });
+        const team = await db.Team.findOne(
+          {
+            where: { ownerId: userId, id: teamId },
+            attributes: ['id', 'ownerId'],
+            include: {
+              as: 'memberUser',
+              model: db.User,
+              attributes: ['id', 'email'],
+              through: { where: { teamId }, attributes: [] },
+            },
+          },
+          { raw: true },
+        );
+        console.log(team.toJSON());
         if (!team)
           return {
             ok: false,
@@ -116,7 +127,8 @@ export default {
         const user = await db.User.findOne({ where: { email } });
         // to protect from spammers
         if (!user) return { ok: true };
-        if (user.id === userId)
+        const isMember = team.memberUser.some((m) => m.email === email);
+        if (user.id === userId || isMember)
           return {
             ok: false,
             errors: [

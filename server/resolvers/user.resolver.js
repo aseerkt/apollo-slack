@@ -5,7 +5,7 @@ import { setTokenCookie } from '../utils/cookieHelper';
 
 export default {
   User: {
-    email: function ({ id, email }, { userId }) {
+    email: function ({ id, email }, args, { userId }) {
       return id === userId ? email : '';
     },
   },
