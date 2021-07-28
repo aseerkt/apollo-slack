@@ -86,6 +86,7 @@ export const IntroSection = styled.div`
   @media screen and (min-width: 768px) {
     grid-template-columns: 1fr 1fr;
   }
+
   .content {
     flex: 0.5;
     h1 {

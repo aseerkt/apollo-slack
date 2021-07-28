@@ -5,11 +5,18 @@ export const GET_TEAM_QUERY = gql`
     getTeam(teamId: $teamId) {
       id
       name
-
+      owner {
+        id
+        username
+      }
       channels {
         id
         name
         private
+      }
+      members {
+        id
+        username
       }
     }
   }
