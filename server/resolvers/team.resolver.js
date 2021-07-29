@@ -1,14 +1,13 @@
 import sequelize from '../db';
 import formatErrors from '../utils/formatErrors';
 import { isTeamOwner, requiresAuth } from '../utils/permissions';
-import { Op } from 'sequelize';
 
 export default {
   Team: {
-    channels: function (root, args, { db }) {
-      return db.Channel.findAll({ where: { teamId: root.id } });
+    channels: function ({ id }, _args, { db }) {
+      return db.Channel.findAll({ where: { teamId: id } });
     },
-    members: function ({ id }, args, { db }) {
+    members: function ({ id }, _args, { db }) {
       return db.User.findAll({
         include: {
           model: db.Team,
@@ -22,13 +21,11 @@ export default {
   Query: {
     allTeams: requiresAuth(function (_rootm, args, { db, userId }) {
       return db.Team.findAll({
-        where: {
-          [Op.or]: [{ ownerId: userId }, { '$memberUser.id$': userId }],
-        },
         include: [
           {
-            as: 'memberUser',
+            as: 'teamMember',
             model: db.User,
+            where: { id: userId },
             attributes: [],
             through: {
               attributes: [],
@@ -42,20 +39,13 @@ export default {
       return db.Team.findOne({
         where: {
           id: teamId,
-          [Op.or]: [
-            {
-              '$memberUser.id$': userId,
-            },
-            {
-              ownerId: userId,
-            },
-          ],
         },
         include: [
           {
             attributes: [],
-            as: 'memberUser',
+            as: 'teamMember',
             model: db.User,
+            where: { id: userId },
             through: {
               where: { userId, teamId },
             },
@@ -70,19 +60,23 @@ export default {
           as: 'team',
           model: db.Team,
           include: {
-            as: 'owner',
+            as: 'teamMember',
             model: db.User,
+            through: {
+              where: { role: 'INVITEE' },
+            },
           },
         },
       });
     }),
   },
   Mutation: {
-    createTeam: requiresAuth(async function (_root, args, { db, userId }) {
+    createTeam: requiresAuth(async function (_root, { name }, { db, userId }) {
       try {
-        await sequelize.transaction(async function (t) {
-          const team = await db.Team.create(
-            { ...args, ownerId: userId },
+        const teamId = await sequelize.transaction(async function (t) {
+          const team = await db.Team.create({ name }, { transaction: t });
+          await db.Member.create(
+            { teamId: team.id, userId, role: 'OWNER' },
             { transaction: t },
           );
           await db.Channel.bulkCreate(
@@ -92,8 +86,9 @@ export default {
             ],
             { transaction: t },
           );
+          return team.id;
         });
-        return { teamId: team.id };
+        return { teamId };
       } catch (err) {
         console.log(err);
         return { ok: false, errors: formatErrors(err) };
@@ -105,29 +100,10 @@ export default {
       { db, userId },
     ) {
       try {
-        const team = await db.Team.findOne(
-          {
-            where: { ownerId: userId, id: teamId },
-            attributes: ['id', 'ownerId'],
-            include: {
-              as: 'memberUser',
-              model: db.User,
-              attributes: ['id', 'email'],
-              through: { where: { teamId }, attributes: [] },
-            },
-          },
-          { raw: true },
-        );
-        console.log(team.toJSON());
-        if (!team)
-          return {
-            ok: false,
-            errors: [{ path: 'unknown', message: 'Something went wrong' }],
-          };
         const user = await db.User.findOne({ where: { email } });
         // to protect from spammers
         if (!user) return { ok: true };
-        const isMember = team.memberUser.some((m) => m.email === email);
+        const isMember = team.teamMember.some((m) => m.email === email);
         if (user.id === userId || isMember)
           return {
             ok: false,
@@ -138,9 +114,10 @@ export default {
               },
             ],
           };
-        await db.TeamInvite.create({
+        await db.Member.create({
           userId: user.id,
-          teamId: team.id,
+          teamId,
+          role: 'INVITEE',
         });
         return { ok: true };
       } catch (err) {

@@ -5,8 +5,8 @@ import userModel from './models/user.model.js';
 import teamModel from './models/team.model.js';
 import channelModel from './models/channel.model.js';
 import messageModel from './models/message.model.js';
-import memberModel from './models/member.model.js';
-import teamInviteModel from './models/teamInvite.model.js';
+import tMemberModel from './models/tmember.model.js';
+import pcMemberModel from './models/pcmember.model.js';
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
@@ -24,8 +24,8 @@ const modelDefiners = [
   teamModel,
   channelModel,
   messageModel,
-  memberModel,
-  teamInviteModel,
+  tMemberModel,
+  pcMemberModel,
   // Add more models here...
   // require('./models/item'),
 ];

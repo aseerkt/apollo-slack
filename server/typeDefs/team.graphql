@@ -1,8 +1,6 @@
 type Team {
   id: Int!
   name: String!
-  owner: User!
-  ownerId: Int!
   members: [User!]!
   channels: [Channel!]!
 }

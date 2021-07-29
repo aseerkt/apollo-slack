@@ -1,15 +1,9 @@
 import { genSalt, hash } from 'bcryptjs';
 
 export default function applyExtraSetup(sequelize) {
-  const { Team, Channel, Message, User, TeamInvite, Member } = sequelize.models;
+  const { Team, Channel, Message, User, TMember, PCMember } = sequelize.models;
 
   // RELATIONS
-
-  // team : owner m:1
-  Team.belongsTo(User, {
-    as: 'owner',
-    foreignKey: { name: 'ownerId', allowNull: false },
-  });
 
   // team : channel 1:m
   Channel.belongsTo(Team, { foreignKey: { name: 'teamId', allowNull: false } });
@@ -25,32 +19,38 @@ export default function applyExtraSetup(sequelize) {
     foreignKey: { name: 'userId', allowNull: false },
   });
 
-  // team : invite 1:m
-  TeamInvite.belongsTo(Team, {
-    as: 'team',
-    foreignKey: { name: 'teamId', allowNull: false },
-  });
+  // MANY TO MANY
 
-  // invite : user m:1
-  TeamInvite.belongsTo(User, {
-    as: 'user',
-    foreignKey: { name: 'userId', allowNull: false },
-  });
-
-  // Member.removeAttribute('id');
-
-  // team : memeber : user m:n
+  // team : tmemeber : user m:n
   Team.belongsToMany(User, {
-    through: 'members',
-    as: 'memberUser',
+    through: { model: TMember },
+    as: 'teamMember',
     foreignKey: {
       name: 'teamId',
       allowNull: false,
     },
   });
   User.belongsToMany(Team, {
-    through: 'members',
+    through: { model: TMember },
     as: 'memberTeam',
+    foreignKey: {
+      name: 'userId',
+      allowNull: false,
+    },
+  });
+
+  // channel : pcmemeber : user m:n
+  Channel.belongsToMany(User, {
+    through: { model: PCMember },
+    as: 'channelMember',
+    foreignKey: {
+      name: 'channelId',
+      allowNull: false,
+    },
+  });
+  User.belongsToMany(Channel, {
+    through: { model: PCMember },
+    as: 'memberChannel',
     foreignKey: {
       name: 'userId',
       allowNull: false,

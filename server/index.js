@@ -16,7 +16,7 @@ import sequelize from './db/index.js';
 import { extractAndIssueTokens } from './utils/cookieHelper.js';
 
 async function startApolloServer() {
-  await sequelize.sync({});
+  await sequelize.sync({ force: true });
 
   const app = express();
 

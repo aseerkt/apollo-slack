@@ -82,7 +82,10 @@ function ListMyTeams() {
         loading={loading}
       >
         {data?.allTeams?.length === 0 && (
-          <div>You are not logged into any workspaces</div>
+          <div style={{ margin: '2rem 0' }}>
+            <p>You are not logged into any workspaces</p>
+            <Link to='/create-team'>Create WorkSpace</Link>
+          </div>
         )}
         {data?.allTeams?.map((t) => (
           <TeamLink
