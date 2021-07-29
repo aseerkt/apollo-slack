@@ -1,0 +1,15 @@
+[
+  {"userId": 1, "teamId": 1, "role": "OWNER"},
+  {"userId": 1, "teamId": 2, "role": "OWNER"},
+  {"userId": 2, "teamId": 3, "role": "OWNER"},
+  {"userId": 2, "teamId": 4, "role": "OWNER"},
+  {"userId": 3, "teamId": 5, "role": "OWNER"},
+  {"userId": 3, "teamId": 6, "role": "OWNER"},
+
+  {"userId": 2, "teamId": 1, "role": "MEMBER"},
+  {"userId": 3, "teamId": 1, "role": "MEMBER"},
+  {"userId": 3, "teamId": 2, "role": "MEMBER"},
+
+  {"userId": 1, "teamId": 3, "role": "INVITEE"},
+  {"userId": 1, "teamId": 5, "role": "INVITEE"}
+]

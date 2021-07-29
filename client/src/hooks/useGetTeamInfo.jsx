@@ -17,8 +17,10 @@ export default function useGetTeamInfo() {
     : data?.getTeam?.channels[0];
 
   return {
-    team: data?.getTeam,
+    teamId,
+    channelId,
     loading,
+    team: data?.getTeam,
     currentChannel,
   };
 }

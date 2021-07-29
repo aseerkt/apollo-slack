@@ -3,17 +3,14 @@ import gql from 'graphql-tag';
 
 const GET_TEAM_INVITES_QUERY = gql`
   query GetTeamInvites {
-    getTeamInvites {
+    getInvitedTeams {
       id
-      createdAt
-      teamId
-      team {
+      name
+      members {
         id
-        name
-        owner {
-          username
-          email
-        }
+        username
+        email
+        role
       }
     }
   }

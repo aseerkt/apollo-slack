@@ -9,6 +9,9 @@ function ChannelHeader() {
         # {currentChannel?.name || `Welcome to ${team?.name}`}{' '}
         <i className='fas fa-chevron-down'></i>
       </h3>
+      <div>
+        <span>{team?.members?.length}</span>
+      </div>
     </ChannelHeaderStyled>
   );
 }

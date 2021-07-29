@@ -1,3 +1,4 @@
+import { Op, QueryTypes } from 'sequelize';
 import sequelize from '../db';
 import formatErrors from '../utils/formatErrors';
 import { isTeamOwner, requiresAuth } from '../utils/permissions';
@@ -7,64 +8,78 @@ export default {
     channels: function ({ id }, _args, { db }) {
       return db.Channel.findAll({ where: { teamId: id } });
     },
-    members: function ({ id }, _args, { db }) {
-      return db.User.findAll({
-        include: {
-          model: db.Team,
-          as: 'memberTeam',
-          where: { id },
-          attributes: [],
-        },
-      });
+    members: async function ({ id }, _args, { db }) {
+      const members = await sequelize.query(
+        `SELECT 
+          u.id,
+          u.username,
+          u.email,
+          tm.role
+        FROM users u
+        JOIN tmembers tm
+        ON tm."userId"=u.id
+        WHERE tm."teamId"=2;`,
+        { raw: true, type: QueryTypes.SELECT },
+      );
+      console.log(members);
+
+      return members;
     },
   },
   Query: {
     allTeams: requiresAuth(function (_rootm, args, { db, userId }) {
-      return db.Team.findAll({
-        include: [
-          {
-            as: 'teamMember',
-            model: db.User,
-            where: { id: userId },
-            attributes: [],
-            through: {
+      return db.Team.findAll(
+        {
+          include: [
+            {
+              as: 'teamMember',
+              model: db.User,
+              where: { id: userId },
               attributes: [],
-              where: { userId },
+              through: {
+                attributes: [],
+                where: {
+                  userId,
+                  role: {
+                    [Op.or]: ['OWNER', 'MEMBER'],
+                  },
+                },
+              },
             },
-          },
-        ],
-      });
+          ],
+        },
+        { raw: true },
+      );
     }),
     getTeam: requiresAuth(async function (root, { teamId }, { db, userId }) {
-      return db.Team.findOne({
-        where: {
-          id: teamId,
-        },
-        include: [
-          {
-            attributes: [],
-            as: 'teamMember',
-            model: db.User,
-            where: { id: userId },
-            through: {
-              where: { userId, teamId },
-            },
+      return db.Team.findOne(
+        {
+          where: {
+            id: teamId,
           },
-        ],
-      });
-    }),
-    getTeamInvites: requiresAuth(function (root, args, { db, userId }) {
-      return db.TeamInvite.findAll({
-        where: { userId },
-        include: {
-          as: 'team',
-          model: db.Team,
-          include: {
-            as: 'teamMember',
-            model: db.User,
-            through: {
-              where: { role: 'INVITEE' },
+          include: [
+            {
+              attributes: [],
+              as: 'teamMember',
+              model: db.User,
+              where: { id: userId },
+              through: {
+                where: { userId, teamId },
+              },
             },
+          ],
+        },
+        { raw: true },
+      );
+    }),
+    getInvitedTeams: requiresAuth(function (root, args, { db, userId }) {
+      return db.Team.findAll({
+        include: {
+          as: 'teamMember',
+          model: db.User,
+          where: { id: userId },
+          through: {
+            where: { role: 'INVITEE' },
           },
         },
       });
@@ -75,7 +90,7 @@ export default {
       try {
         const teamId = await sequelize.transaction(async function (t) {
           const team = await db.Team.create({ name }, { transaction: t });
-          await db.Member.create(
+          await db.TMember.create(
             { teamId: team.id, userId, role: 'OWNER' },
             { transaction: t },
           );
@@ -130,22 +145,11 @@ export default {
       { teamId },
       { db, userId },
     ) {
-      console.log(teamId, userId);
       try {
-        const invitation = db.TeamInvite.findOne({
-          where: {
-            teamId,
-            userId,
-          },
-        });
-        if (!invitation) return false;
-        await sequelize.transaction(async function (t) {
-          await db.Member.create({ teamId, userId }, { transaction: t });
-          await db.TeamInvite.destroy(
-            { where: { userId, teamId } },
-            { transaction: t },
-          );
-        });
+        await db.TMember.update(
+          { role: 'MEMBER' },
+          { where: { teamId, userId, role: 'INVITEE' } },
+        );
         return true;
       } catch (err) {
         console.log(err);

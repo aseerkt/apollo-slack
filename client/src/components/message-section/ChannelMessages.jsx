@@ -89,7 +89,9 @@ function ChannelMessages() {
   );
 
   useEffect(() => {
-    subscribeToNewMessages();
+    if (channelId) {
+      subscribeToNewMessages();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [channelId]);
 

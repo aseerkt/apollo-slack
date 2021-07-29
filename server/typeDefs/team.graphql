@@ -1,23 +1,27 @@
+enum TeamMemberRole {
+  OWNER
+  MEMBER
+  INVITEE
+}
+
+type Member {
+  id: Int!
+  email: String!
+  username: String!
+  role: TeamMemberRole
+}
+
 type Team {
   id: Int!
   name: String!
-  members: [User!]!
+  members: [Member!]!
   channels: [Channel!]!
-}
-
-type TeamInvite {
-  id: Int!
-  createdAt: String!
-  userId: Int!
-  teamId: Int!
-  user: User!
-  team: Team!
 }
 
 type Query {
   allTeams: [Team!]!
   getTeam(teamId: Int!): Team
-  getTeamInvites: [TeamInvite!]
+  getInvitedTeams: [Team!]!
 }
 
 type CreateTeamResponse {

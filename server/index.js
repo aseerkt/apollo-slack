@@ -12,11 +12,11 @@ const {
 } = require('apollo-server-core');
 import { CLIENT_URL, PORT, IS_PROD } from './constants.js';
 import schema from './schema.js';
-import sequelize from './db/index.js';
+import sequelize from './db';
 import { extractAndIssueTokens } from './utils/cookieHelper.js';
 
 async function startApolloServer() {
-  await sequelize.sync({ force: true });
+  await sequelize.sync({});
 
   const app = express();
 

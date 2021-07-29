@@ -2,7 +2,7 @@ import { Button, Card, Spin } from 'antd';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import useAcceptTeamInvitationMutation from '../../hooks/apollo/mutations/acceptTeamInvitation';
-import useGetTeamInvitesQuery from '../../hooks/apollo/queries/getTeamInvites';
+import useGetTeamInvitesQuery from '../../hooks/apollo/queries/getInvitedTeams';
 import useMeQuery from '../../hooks/apollo/queries/me';
 
 const InvitedBy = styled.p`
@@ -62,12 +62,14 @@ function ListTeamInvites() {
 
   if (loading) return <Spin size='large' />;
 
-  if (!loading && (!data?.getTeamInvites || data?.getTeamInvites.length === 0))
+  if (
+    !loading &&
+    (!data?.getInvitedTeams || data?.getInvitedTeams.length === 0)
+  )
     return null;
 
   const acceptInvite = (teamId) => async () => {
     try {
-      alert(teamId);
       const res = await acceptTeamInvitation({ variables: { teamId } });
       console.log(res);
       if (res.data?.acceptTeamInvitation) {
@@ -91,11 +93,12 @@ function ListTeamInvites() {
         }
         loading={loading}
       >
-        {data?.getTeamInvites?.map(({ team: t }) => (
-          <div key={`/client/T${t.id}/C`}>
+        {data?.getInvitedTeams?.map((t) => (
+          <div style={{ marginBottom: '0.7rem' }} key={`/client/T${t.id}/C`}>
             <InvitedBy>
               <i className='fas fa-user-plus'></i>
-              Invited by {t.owner.username} ({t.owner.email})
+              Invited by {t.members.find((m) => m.role === 'OWNER').username} (
+              {t.members.find((m) => m.role === 'OWNER').email})
             </InvitedBy>
             <TeamItem>
               <TeamAvatar>

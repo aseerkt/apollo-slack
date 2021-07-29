@@ -65,4 +65,11 @@ export default function applyExtraSetup(sequelize) {
     const hashedPassword = await hash(user.password, salt);
     user.password = hashedPassword;
   });
+  User.beforeBulkCreate(async function (users) {
+    for (let i = 0; i < users.length; i++) {
+      const salt = await genSalt(12);
+      const hashedPassword = await hash(users[i].password, salt);
+      users[i].password = hashedPassword;
+    }
+  });
 }
