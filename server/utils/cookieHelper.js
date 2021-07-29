@@ -3,18 +3,26 @@ import { signTokens, verifyAccessToken, verifyRefreshToken } from './jwtHelper';
 
 export const COOKIE_NAME = 'apollo-slack';
 
-export function setTokenCookie(req, res, token) {
-  // get url from cross site
+function getCookieOptions(req) {
+  // get url from site
   const origin = req.get('origin');
   // check if cross site request is coming from secure connection
   const isSecure = IS_PROD && origin && origin.startsWith('https://');
 
-  res.cookie(COOKIE_NAME, token, {
+  return {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: isSecure,
     sameSite: isSecure ? 'none' : 'lax',
-  });
+  };
+}
+
+export function setTokenCookie(req, res, token) {
+  res.cookie(COOKIE_NAME, token, getCookieOptions(req));
+}
+
+export function removeTokenCookie(req) {
+  res.clearCookie(COOKIE_NAME, getCookieOptions(req));
 }
 
 export function getCookieToken(req) {

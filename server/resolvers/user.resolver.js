@@ -2,6 +2,7 @@ import formatErrors from '../utils/formatErrors';
 import bcrypt from 'bcryptjs';
 import { signAccessToken, signRefreshToken } from '../utils/jwtHelper';
 import { setTokenCookie } from '../utils/cookieHelper';
+import { requiresAuth } from '../utils/permissions';
 
 export default {
   User: {
@@ -60,5 +61,6 @@ export default {
         return { ok: false, errors: formatErrors(err) };
       }
     },
+    logout: requiresAuth(async function (root, args, { db, userId }) {}),
   },
 };
