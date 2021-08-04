@@ -10,7 +10,7 @@ export default function useGetTeamInfo() {
   });
 
   if (!channelId && data)
-    history.push(`/client/T${teamId}/C${data?.getTeam?.channels[0].id}`);
+    history.replace(`/client/T${teamId}/C${data?.getTeam?.channels[0].id}`);
 
   const currentChannel = teamId
     ? data?.getTeam?.channels?.find((c) => c.id === parseInt(channelId))

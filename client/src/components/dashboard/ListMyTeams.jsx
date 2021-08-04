@@ -69,7 +69,10 @@ function ListMyTeams() {
   if (loading) return <Spin size='large' />;
 
   return (
-    <TeamList style={{ width: '100%', padding: '3rem 0', textAlign: 'center' }}>
+    <TeamList
+      id='team-list'
+      style={{ width: '100%', padding: '3rem 0', textAlign: 'center' }}
+    >
       <h2>Open a workspace</h2>
       <Card
         hoverable

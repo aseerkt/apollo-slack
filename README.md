@@ -1,2 +1,3 @@
 # apollo-slack
-Slack Clone | Team messaging application
+
+> Slack Clone | Team messaging application

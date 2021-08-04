@@ -82,6 +82,31 @@ export const TeamHeaderStyled = styled.header`
   }
 `;
 
+export const TeamMenuHeader = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100%;
+  line-height: initial;
+
+  .team-icon {
+    margin-right: 0.8rem;
+    background-color: #444;
+    color: #fff;
+    height: 2rem;
+    width: 2rem;
+    display: grid;
+    place-items: center;
+  }
+
+  .team-details {
+    flex: 1;
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+`;
+
 export const ToggleTeamOptionsButton = styled.button`
   background-color: transparent;
   color: #fff;

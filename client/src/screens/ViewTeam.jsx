@@ -1,6 +1,6 @@
 import { Spin } from 'antd';
 import Channels from '../components/sidebar/Channels';
-import TeamHeader from '../components/sidebar/TeamHeader';
+import TeamHeader from '../components/sidebar/TeamHeader/TeamHeader';
 import ChannelHeader from '../components/message-section/ChannelHeader';
 import useGetTeamInfo from '../hooks/useGetTeamInfo';
 import {

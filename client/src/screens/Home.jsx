@@ -83,24 +83,49 @@ export const IntroSection = styled.div`
   grid-template-columns: 1fr;
   align-items: center;
 
-  @media screen and (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
+  .hero-image {
+    order: 1;
+    margin-bottom: 1rem;
+  }
+  .content {
+    order: 2;
   }
 
   .content {
-    flex: 0.5;
     h1 {
-      font-size: 3rem;
+      font-size: 2rem;
       font-weight: 900;
       line-height: 1.2;
     }
     p {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
     }
   }
 
   img {
     width: 100%;
+  }
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+
+    .hero-image {
+      order: 2;
+      margin-bottom: unset;
+    }
+
+    .content {
+      order: 1;
+
+      h1 {
+        font-size: 3rem;
+        font-weight: 900;
+        line-height: 1.2;
+      }
+      p {
+        font-size: 1.5rem;
+      }
+    }
   }
 `;
 
@@ -152,7 +177,7 @@ export default function Home() {
                 </Link>
               </NavLinks>
             </div>
-            <div>
+            <div className='hero-image'>
               <img src={slackDraw} alt='slack draw' />
             </div>
           </IntroSection>
