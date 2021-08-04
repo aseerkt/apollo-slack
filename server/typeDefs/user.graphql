@@ -24,4 +24,5 @@ type Mutation {
     password: String!
   ): DefaultResponse!
   login(usernameOrEmail: String!, password: String!): LoginResponse!
+  logout: Boolean!
 }

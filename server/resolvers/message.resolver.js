@@ -50,8 +50,6 @@ export default {
           { raw: true },
         );
 
-        console.log({ message: message.dataValues });
-
         const currentUser = await db.User.findOne({ where: { id: userId } });
 
         pubsub.publish(NEW_CHANNEL_MESSAGE, {

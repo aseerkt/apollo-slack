@@ -21,7 +21,7 @@ export function setTokenCookie(req, res, token) {
   res.cookie(COOKIE_NAME, token, getCookieOptions(req));
 }
 
-export function removeTokenCookie(req) {
+export function removeTokenCookie(req, res) {
   res.clearCookie(COOKIE_NAME, getCookieOptions(req));
 }
 
